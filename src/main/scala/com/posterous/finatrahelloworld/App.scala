@@ -33,7 +33,7 @@ object App {
         val boundary = ctype.substring(boundaryIndex + 9).getBytes
         val input = new ByteArrayInputStream(request.getContent.toString(UTF_8).getBytes) 
         
-        val multiParams = new scala.collection.mutable.Map[Tuple[]]
+        //val multiParams = new scala.collection.mutable.Map[Tuple[]]
         var output = new ByteArrayOutputStream
         try {
           val multistream = new MultipartStream(input, boundary)
@@ -42,7 +42,7 @@ object App {
             val header = multistream.readHeaders
             multistream.readBodyData(output)
             nextPart = multistream.readBoundary
-            //println("a")
+            println(header)
             //println(output)
           }
         } catch {
