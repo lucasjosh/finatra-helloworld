@@ -4,6 +4,7 @@ import com.posterous.finatra.{FinatraApp, FinatraServer}
 import org.jboss.netty.util.CharsetUtil.UTF_8
 import org.apache.commons.fileupload._
 import com.twitter.finagle.http.{Http, RichHttp, Request, Response}
+import scala.collection.mutable._
 import java.io._
 
 class FakeServlet(request:Request) {
@@ -33,22 +34,24 @@ object App {
         val boundary = ctype.substring(boundaryIndex + 9).getBytes
         val input = new ByteArrayInputStream(request.getContent.toString(UTF_8).getBytes) 
         
-        //val multiParams = new scala.collection.mutable.Map[Tuple[]]
-        var output = new ByteArrayOutputStream
+        val multiParams = new ListBuffer[Tuple3[String, java.util.Map[String, String], ByteArrayOutputStream]]
         try {
           val multistream = new MultipartStream(input, boundary)
-          var nextPart = multistream.skipPreamble()
+          var nextPart = multistream.skipPreamble
           while(nextPart){
-            val header = multistream.readHeaders
-            multistream.readBodyData(output)
+            val paramParser = new ParameterParser
+            val headers = paramParser.parse(multistream.readHeaders.toString, ';').asInstanceOf[java.util.Map[String,String]]
+            val out = new ByteArrayOutputStream
+            val name = headers.get("name").toString
+            multistream.readBodyData(out)
+            multiParams += Tuple3(name, headers, out)
             nextPart = multistream.readBoundary
-            println(header)
-            //println(output)
           }
         } catch {
           case e: MultipartStream.MalformedStreamException => println("wrong") 
           case e: IOException => println("error") 
         }
+        println(multiParams)
       }
     }
   }
