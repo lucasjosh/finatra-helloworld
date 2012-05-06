@@ -18,7 +18,7 @@
     <maven.compiler.source>1.5</maven.compiler.source>
     <maven.compiler.target>1.5</maven.compiler.target>
     <encoding>UTF-8</encoding>
-    <scala.version>2.8.1</scala.version>
+    <scala.version>2.9.1</scala.version>
   </properties>
 
   <repositories>
@@ -30,7 +30,7 @@
     <repository>
       <id>repo.juliocapote.com</id>
       <url>http://repo.juliocapote.com</url>
-    </repository> 
+    </repository>
   </repositories>
 
   <pluginRepositories>
@@ -49,7 +49,7 @@
     <dependency>
       <groupId>com.posterous</groupId>
       <artifactId>finatra</artifactId>
-      <version>4.0.0-SNAPSHOT</version>
+      <version>4.0.1-SNAPSHOT</version>
     </dependency>
 
     <dependency>
@@ -57,7 +57,7 @@
       <artifactId>commons-fileupload</artifactId>
       <version>1.2.1</version>
     </dependency>
-  
+
   </dependencies>
 
   <build>
@@ -76,9 +76,9 @@
             </launcher>
             <!-- you could define other launcher -->
           </launchers>
-        </configuration> 
-        
-        
+        </configuration>
+
+
         <executions>
           <execution>
             <goals>
