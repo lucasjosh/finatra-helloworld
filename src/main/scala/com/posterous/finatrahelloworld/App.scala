@@ -18,12 +18,16 @@ object App {
       }
     }
 
-    get("/templatest") { request =>
-      render(path="lol.mustache", exports=Map("foo" -> "bar"))
+    get("/template") { request =>
+      render(path="example.mustache", exports=Map("foo" -> "bar"))
     }
 
     get("/a/b/:c") { request =>
       response(body=request.params.get("c").getOrElse("none"))
+    }
+
+    get("/json") { request =>
+      toJson(Map("foo" -> "bar"))
     }
 
   }
