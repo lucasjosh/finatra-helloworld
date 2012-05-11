@@ -30,6 +30,13 @@ object App {
       toJson(Map("foo" -> "bar"))
     }
 
+    get("/formtest") { request =>
+      render(path="formtest.mustache")
+    }
+
+    post("/formtest") { request =>
+      response(body=request.params.get("foo").getOrElse("none"))
+    }
   }
 
   def main(args: Array[String]) {
