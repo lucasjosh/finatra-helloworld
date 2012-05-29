@@ -1,6 +1,6 @@
 package com.posterous.finatrahelloworld
 
-import com.posterous.finatra.{FinatraApp, FinatraServer}
+import com.posterous.finatra.{FinatraApp, FinatraServer, LayoutHelper, LayoutHelperFactory}
 import com.capotej.finatra_core.MultipartItem
 
 object App {
@@ -19,7 +19,12 @@ object App {
     }
 
     get("/template") { request =>
-      render(path="example.mustache", exports=Map("foo" -> "bar"))
+      case class Thing(name: String)
+      object TheThing {
+        val foo = "bar"
+        val list = List(new Thing("a"), new Thing("b"))
+      }
+      render(path="example.mustache", exports=TheThing)
     }
 
     get("/a/b/:c") { request =>
@@ -41,6 +46,18 @@ object App {
 
   def main(args: Array[String]) {
     val helloWorld = new HelloWorld
+
+    class MyLayoutHelper(yld: String) extends LayoutHelper(yld) {
+      val hey = "there"
+    }
+
+    class MyFactory extends LayoutHelperFactory {
+      override def apply(str: String) = {
+        new MyLayoutHelper(str)
+      }
+    }
+
+    FinatraServer.layoutHelperFactory = new MyFactory
     FinatraServer.register(helloWorld)
     FinatraServer.start()
   }

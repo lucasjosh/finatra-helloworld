@@ -45,7 +45,7 @@
     <dependency>
       <groupId>com.posterous</groupId>
       <artifactId>finatra</artifactId>
-      <version>4.0.4</version>
+      <version>4.1.0</version>
     </dependency>
 
     <dependency>
