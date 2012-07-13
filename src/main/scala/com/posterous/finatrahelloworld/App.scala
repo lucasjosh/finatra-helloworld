@@ -1,63 +1,49 @@
 package com.posterous.finatrahelloworld
 
-import com.posterous.finatra.{FinatraApp, FinatraServer, LayoutHelper, LayoutHelperFactory}
-import com.capotej.finatra_core.MultipartItem
+import com.twitter.finatra.{Controller, FinatraServer}
+import com.twitter.View
+
+case class Tweet(status:String)
+
+class TimelineView(val tweets:List[Tweet]) extends View {
+  val template = "timeline.mustache"
+}
 
 object App {
 
-  class HelloWorld extends FinatraApp {
+  class HelloWorld extends Controller {
 
-    get("/") { request =>
-      response(body="hey")
+    def tweets = List(new Tweet("hey!"), new Tweet("lol"))
+
+    get("/tweets.json") { request =>
+      render.json(tweets)
     }
 
-    post("/form") { request =>
-      request.multiParams.get("foo") match {
-        case Some(item) => response(body=item.data.toString)
-        case None => response(status=500, body="incorrect params sent")
-      }
+    get("/tweets") { request =>
+      val tweetsView  = new TimelineView(tweets)
+
+      render.view(tweetsView).ok
     }
 
-    get("/template") { request =>
-      case class Thing(name: String)
-      object TheThing {
-        val foo = "bar"
-        val list = List(new Thing("a"), new Thing("b"))
-      }
-      render(path="example.mustache", exports=TheThing)
+    get("/:status") { request =>
+      val statusCode = request.params("status").toInt
+
+      render.nothing.status(statusCode)
     }
 
-    get("/a/b/:c") { request =>
-      response(body=request.params.get("c").getOrElse("none"))
+    get("/not_found") { request =>
+      render.nothing.notFound
     }
 
-    get("/json") { request =>
-      toJson(Map("foo" -> "bar"))
+    get("/headers") { request =>
+      render.nothing.header("X-GitSHA", "1ecd6b1")
     }
 
-    get("/formtest") { request =>
-      render(path="formtest.mustache")
-    }
-
-    post("/formtest") { request =>
-      response(body=request.params.get("foo").getOrElse("none"))
-    }
   }
 
   def main(args: Array[String]) {
     val helloWorld = new HelloWorld
 
-    class MyLayoutHelper(yld: String) extends LayoutHelper(yld) {
-      val hey = "there"
-    }
-
-    class MyFactory extends LayoutHelperFactory {
-      override def apply(str: String) = {
-        new MyLayoutHelper(str)
-      }
-    }
-
-    FinatraServer.layoutHelperFactory = new MyFactory
     FinatraServer.register(helloWorld)
     FinatraServer.start()
   }
