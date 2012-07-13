@@ -1,7 +1,7 @@
 package com.posterous.finatrahelloworld
 
 import com.twitter.finatra.{Controller, FinatraServer}
-import com.twitter.View
+import com.twitter.finatra.View
 
 case class Tweet(status:String)
 
@@ -22,7 +22,7 @@ object App {
     get("/tweets") { request =>
       val tweetsView  = new TimelineView(tweets)
 
-      render.view(tweetsView).ok
+      render.view(tweetsView)
     }
 
     get("/:status") { request =>
