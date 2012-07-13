@@ -15,6 +15,15 @@ object App {
 
     def tweets = List(new Tweet("hey!"), new Tweet("lol"))
 
+    //curl -F "foo=bar" http://localhost:7070/multi
+    post("/multi") { request =>
+      render.plain(request.multiParams("foo").data)
+    }
+
+    get("/cookies") { request =>
+      render.json(request.cookies).header("Content-Type", "text/html")
+    }
+
     get("/tweets.json") { request =>
       render.json(tweets)
     }
@@ -25,7 +34,7 @@ object App {
       render.view(tweetsView)
     }
 
-    get("/:status") { request =>
+    get("/status/:status") { request =>
       val statusCode = request.params("status").toInt
 
       render.nothing.status(statusCode)
