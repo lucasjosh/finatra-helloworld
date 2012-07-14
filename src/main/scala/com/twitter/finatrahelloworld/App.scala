@@ -1,4 +1,4 @@
-package com.posterous.finatrahelloworld
+package com.twitter.finatrahelloworld
 
 import com.twitter.finatra.{Controller, FinatraServer}
 import com.twitter.finatra.View

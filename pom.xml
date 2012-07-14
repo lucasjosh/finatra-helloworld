@@ -1,6 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.capotej</groupId>
+  <groupId>com.twitter</groupId>
   <artifactId>finatrahelloworld</artifactId>
   <version>1.0-SNAPSHOT</version>
   <name>${project.artifactId}</name>
@@ -45,13 +45,27 @@
     <dependency>
       <groupId>com.twitter</groupId>
       <artifactId>finatra</artifactId>
-      <version>0.1.6</version>
+      <version>0.1.7</version>
     </dependency>
 
     <dependency>
       <groupId>commons-fileupload</groupId>
       <artifactId>commons-fileupload</artifactId>
       <version>1.2.1</version>
+    </dependency>
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.8.1</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.scalatest</groupId>
+      <artifactId>scalatest_${scala.version}</artifactId>
+      <version>1.7.2</version>
+      <scope>test</scope>
     </dependency>
 
   </dependencies>
@@ -68,7 +82,7 @@
           <launchers>
             <launcher>
               <id>main</id>
-              <mainClass>com.posterous.finatrahelloworld.App</mainClass>
+              <mainClass>com.twitter.finatrahelloworld.App</mainClass>
             </launcher>
             <!-- you could define other launcher -->
           </launchers>
@@ -94,16 +108,16 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.6</version>
+        <version>2.12</version>
         <configuration>
-          <useFile>false</useFile>
-          <disableXmlReport>true</disableXmlReport>
-          <!-- If you have classpath issue like NoDefClassError,... -->
-          <!-- useManifestOnlyJar>false</useManifestOnlyJar -->
+          <useSystemClassLoader>false</useSystemClassLoader>
+          <argLine>-Xmx1024m</argLine>
           <includes>
-            <include>**/*Test.*</include>
-            <include>**/*Suite.*</include>
+            <include>**/*Spec.java</include>
           </includes>
+          <excludes>
+            <exclude>**/*Test.java</exclude>
+          </excludes>
         </configuration>
       </plugin>
     </plugins>
