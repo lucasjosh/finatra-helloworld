@@ -17,7 +17,7 @@ object App {
 
     //curl -F "foo=bar" http://localhost:7070/multi
     post("/multi") { request =>
-      render.plain(request.multiParams("foo").data)
+      render.plain(request.multiParams("foo").data.toString())
     }
 
     get("/cookies") { request =>
@@ -31,7 +31,7 @@ object App {
     get("/tweets") { request =>
       val tweetsView  = new TimelineView(tweets)
 
-      render.view(tweetsView)
+      render.view(tweetsView).header("Content-Type", "text/html")
     }
 
     get("/status/:status") { request =>
